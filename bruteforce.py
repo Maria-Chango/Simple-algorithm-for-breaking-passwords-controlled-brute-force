@@ -1,64 +1,69 @@
 import time
 import matplotlib.pyplot as plt
 
-minusculas = ['a','b','c','d','e','f','g','h','i','j',
-              'k','l','m','n','o','p','q','r','s','t',
-              'u','v','w','x','y','z']
-mayusculas = ['A','B','C','D','E','F','G','H','I','J',
-              'K','L','M','N','O','P','Q','R','S','T',
-              'U','V','W','X','Y','Z']
-numeros = ['0','1','2','3','4','5','6','7','8','9']
-digitos = ['!','@','#','$','%','&']
 
-alfabeto = minusculas + mayusculas + numeros + digitos
+minusculas = "abcdefghijklmnopqrstuvwxyz"
+mayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+numeros = "0123456789"
 
+alfabeto = minusculas + mayusculas + numeros
 
-def probar(longitud, actual, objetivo, intentos):
-    if len(actual) == longitud:
-        intentos[0] += 1
-        iguales = True
-        for i in range(longitud):
-            if actual[i] != objetivo[i]:
-                iguales = False
-                break
-        if iguales:
-            return True
+def probar_contraseña(contraseña_probar, objetivo, intentos):
+    intentos[0] += 1
+    if contraseña_probar == objetivo:
+        return True
+    
+    
+    if len(contraseña_probar) >= len(objetivo):
         return False
-
-    for c in alfabeto:
-        nuevo = actual + [c]  
-        if probar(longitud, nuevo, objetivo, intentos):
+        
+    for char in alfabeto:
+        if probar_contraseña(contraseña_probar + char, objetivo, intentos):
             return True
+            
     return False
 
-def romper(objetivo):
-    intentos = [0]
-    inicio = time.time()
-    longitud = 1
-    while True:
-        if probar(longitud, [], list(objetivo), intentos):
-            fin = time.time()
-            return intentos[0], fin - inicio, longitud
-        longitud += 1
 
-# -------- PRUEBAS VARIAS --------
-claves = [ "abc"]
+def ejecutar_ataque(contraseña_objetivo):
+    intentos_totales = [0]
+    tiempo_inicio = time.time()
+    
+    print(f"Ataque de fuerza bruta para: '{contraseña_objetivo}'")
+    
+    encontrada = probar_contraseña("", contraseña_objetivo, intentos_totales)
+    
+    tiempo_fin = time.time()
+    duracion = tiempo_fin - tiempo_inicio
 
+    if encontrada:
+        print(f"Contraseña encontrada: '{contraseña_objetivo}'")
+        print(f"Intentos realizados: {intentos_totales[0]:,}")
+        print(f"Tiempo de ejecución: {duracion:.4f} segundos")
+        return duracion, intentos_totales[0]
+    else:
+        print("La contraseña no fue encontrada")
+        return None, None
+
+# ----- PROGRAMA CON LAS CLAVES DESIGNADAS--------
+claves_de_prueba = ["a","ab", "abc"] 
 tiempos = []
 longitudes = []
 
-for clave in claves:
-    intentos, duracion, lon = romper(clave)
-    print("Contraseña encontrada:", clave)
-    print("Intentos:", intentos)
-    print("Tiempo:", duracion, "segundos\n")
-    tiempos.append(duracion)
-    longitudes.append(len(clave))
+print("-" * 30)
 
-# Gráfico: tiempo en X y longitud en Y
-plt.plot(tiempos, longitudes, linestyle='-', marker='o')
-plt.xlabel("Tiempo (segundos)")
-plt.ylabel("Longitud de contraseña")
-plt.title("Longitud vs Tiempo en ataque de fuerza bruta")
-plt.grid(True)
-plt.show()
+for clave in claves_de_prueba:
+    duracion, intentos = ejecutar_ataque(clave)
+    if duracion is not None:
+        tiempos.append(duracion)
+        longitudes.append(len(clave))
+    print("-" * 30)
+
+# --- GRAFICA---
+if tiempos:
+    plt.figure(figsize=(10, 6))
+    plt.plot(longitudes, tiempos, marker='o', linestyle='-', color='b')
+    plt.title("Rendimiento del Ataque de Fuerza Bruta")
+    plt.xlabel("Longitud de la Contraseña")
+    plt.ylabel("Tiempo de Ejecución en segundos")
+    plt.grid(True)
+    plt.show()

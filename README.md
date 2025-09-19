@@ -37,14 +37,10 @@ At the end, a graph will be displayed illustrating how the execution time increa
 
 ## Example output
 
-- Testing passwords of length 1:
-Found: a | Attempts: 1 | Time: 0.0001 seconds
-
-- Testing passwords of length 2:
-Found: ab | Attempts: 27 | Time: 0.0023 seconds
-
-- Testing passwords of length 3:
-Found: abc | Attempts: 703 | Time: 0.05 seconds
+Brute force attack for: ‘abc’
+Password found: ‘abc’
+Attempts made: 69
+Execution time: 0.0002 seconds
 
 ## Reflection
 If the password has 8 or more characters and uses uppercase letters, numbers, and symbols, the number of possible combinations grows exponentially. A brute force attack could take years or even centuries, depending on the alphabet and its length. That's why long, complex passwords are much more secure.

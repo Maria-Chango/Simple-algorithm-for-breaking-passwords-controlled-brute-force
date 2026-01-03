@@ -3,7 +3,7 @@
 ## Bruteforce Password Cracker
 This program implements a brute-force attack to find short passwords. It generates all possible combinations of a defined alphabet and measures the number of attempts needed to find the password, as well as the time taken by the attack.
 
-## Important 🙌🚧
+## Important 
 
 Before running the script, you must install the Matplotlib library, which is necessary to generate the performance graph.
 
@@ -11,7 +11,7 @@ Bash
 
 pip install matplotlib
 
-## How to run the script ✨
+## How to run the script 
 Clone the repository and enter the folder:
 
 Bash
